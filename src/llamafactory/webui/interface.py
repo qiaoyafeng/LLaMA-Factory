@@ -14,6 +14,7 @@
 
 import os
 
+from .components.chatbot import create_hxq_chat_box
 from ..extras.packages import is_gradio_available
 from .common import save_config
 from .components import (
@@ -75,6 +76,24 @@ def create_web_demo() -> "gr.Blocks":
         engine.manager.add_elems("top", dict(lang=lang))
 
         _, _, chat_elems = create_chat_box(engine, visible=True)
+        engine.manager.add_elems("infer", chat_elems)
+
+        demo.load(engine.resume, outputs=engine.manager.get_elem_list(), concurrency_limit=None)
+        lang.change(engine.change_lang, [lang], engine.manager.get_elem_list(), queue=False)
+        lang.input(save_config, inputs=[lang], queue=False)
+
+    return demo
+
+
+def create_hxq_web_demo() -> "gr.Blocks":
+    engine = Engine(pure_chat=True)
+
+    with gr.Blocks(title="好心情大语言模型 Demo", css=CSS) as demo:
+        gr.HTML("""<h1 align="center">好心情大语言模型 - Demo </h1>""")
+        lang = gr.Dropdown(choices=["en", "zh"], value="zh", scale=1)
+        engine.manager.add_elems("top", dict(lang=lang))
+
+        _, _, chat_elems = create_hxq_chat_box(engine, visible=True)
         engine.manager.add_elems("infer", chat_elems)
 
         demo.load(engine.resume, outputs=engine.manager.get_elem_list(), concurrency_limit=None)
