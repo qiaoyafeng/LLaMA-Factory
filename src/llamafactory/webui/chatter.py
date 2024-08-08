@@ -21,11 +21,13 @@ from numpy.typing import NDArray
 from ..chat import ChatModel
 from ..data import Role
 from ..extras.constants import PEFT_METHODS
+from ..extras.logging import get_logger
 from ..extras.misc import torch_gc
 from ..extras.packages import is_gradio_available
 from .common import QUANTIZATION_BITS, get_save_dir
 from .locales import ALERTS
 
+logger = get_logger(__name__)
 
 if TYPE_CHECKING:
     from ..chat import BaseEngine
@@ -162,4 +164,5 @@ class WebChatModel(ChatModel):
                 bot_text = result
 
             chatbot[-1][1] = bot_text
+            logger.info(f"output_messages: {output_messages}")
             yield chatbot, output_messages
