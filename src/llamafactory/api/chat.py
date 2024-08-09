@@ -22,7 +22,7 @@ from typing import TYPE_CHECKING, AsyncGenerator, Dict, List, Optional, Tuple
 from ..data import Role as DataRole
 from ..extras.logging import get_logger
 from ..extras.packages import is_fastapi_available, is_pillow_available, is_requests_available
-from .common import dictify, jsonify
+from .common import dictify, jsonify, default_sys_message
 from .protocol import (
     ChatCompletionMessage,
     ChatCompletionResponse,
@@ -145,6 +145,10 @@ async def create_chat_completion_response(
 ) -> "ChatCompletionResponse":
     completion_id = "chatcmpl-{}".format(uuid.uuid4().hex)
     input_messages, system, tools, image = _process_request(request)
+    if system:
+        system = default_sys_message + system
+    else:
+        system = default_sys_message
     responses = await chat_model.achat(
         input_messages,
         system,

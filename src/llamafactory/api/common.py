@@ -19,6 +19,8 @@ from typing import TYPE_CHECKING, Any, Dict
 if TYPE_CHECKING:
     from pydantic import BaseModel
 
+default_sys_message = "你是一位心理咨询师，名字心心。请通过如下方式来回答我的提问：第一步，探索用户的问题。第二步，用提问的方式回复。回复字数不少于300个字。"
+
 
 def dictify(data: "BaseModel") -> Dict[str, Any]:
     try:  # pydantic v2
