@@ -145,8 +145,9 @@ class WebChatModel(ChatModel):
     ) -> Generator[Tuple[List[List[Optional[str]]], List[Dict[str, str]]], None, None]:
         chatbot[-1][1] = ""
         response = ""
+        repetition_penalty = 1.2
         for new_text in self.stream_chat(
-            messages, hxq_system + system, tools, image, max_new_tokens=max_new_tokens, top_p=top_p, temperature=temperature
+            messages, hxq_system + system, tools, image, max_new_tokens=max_new_tokens, top_p=top_p, temperature=temperature, repetition_penalty=repetition_penalty
         ):
             response += new_text
             if tools:
